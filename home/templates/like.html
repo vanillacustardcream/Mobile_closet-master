@@ -1,0 +1,44 @@
+{% include 'base.html'%}
+
+<html>
+<head>
+    <style>
+        #columns{
+            column-width:250px;
+            column-gap: 15px;
+            
+          }
+          #columns figure{
+            display: inline-block;
+            
+            margin:0;
+            margin-bottom: 15px;
+            padding:10px;
+            ;
+          }
+          #columns figure img{
+            width:100%;
+            border-radius: 8%;
+            
+          }
+         
+    </style>
+</head>
+
+{% block content %}
+    {%load static%}
+
+<body>
+    
+    
+    <p>내가 좋아요 누른 글</p>
+    <div id="columns">
+    {% for photo in photo_likes  %}
+    <figure  >
+        <img src="{{ photo.imagedata.url }}">
+    </figure>
+    {% endfor %} 
+</div>
+</body>
+</html>
+{% endblock %}

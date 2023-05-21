@@ -1,0 +1,10 @@
+<h1>Closet
+</h1>
+<a href="upload/">업로드</a>
+<a href="results/">결과</a>
+{% for closet in closets.all %}
+    <img src="{{ closet.imgfile.url }}", width=250>
+    
+{%endfor%}
+
+

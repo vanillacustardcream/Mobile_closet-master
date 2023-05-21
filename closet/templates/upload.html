@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+
+<div class = "container">
+    <div class = "row justify-content-md-center">
+        <div class="col-md-4">
+            <h1>사진 업로드</h1>
+            <form method="post" class="post-form my-3" enctype="multipart/form-data" action="" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="imgfile">사진 : </label>
+                    <input type="file" class="form-control" name="imgfile" id="imgfile" required>
+                </div>
+                <br></br>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>    
+            </form>
+        </div>    
+    </div>        
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function predict(imgfile){
+            console.log("hi")
+            $.ajax({
+            type:'POST',
+            data :{
+                imgfile:$('input[name=imgfile]').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                console.log("success")
+                document.forms["post-form"].reset();
+                document.getElemenById("prediction").innerHTML = jason['result']
+                document.getElemenById("imgfile").innerHTML = jason['imgfile']
+                
+                }
+            }
+        )} 
+    
+    </script>
+    
+    
+{% endblock %} 

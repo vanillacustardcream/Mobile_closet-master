@@ -1,0 +1,114 @@
+
+{% include 'base.html'%}
+
+<html>
+  <head>
+    <style>
+        #columns{
+            column-width:250px;
+            column-gap: 15px;
+           
+          }
+          #columns figure{
+            display: inline-block;
+            box-shadow: 5px 5px 5px 5px lightgray;
+            margin:10px;
+            margin-bottom: 15px;
+            border-radius: 8%;
+            
+          }
+          #columns figure img{
+            width:100%;
+            border-radius: 8%;
+            
+          }
+         
+    </style>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+  </head>
+    {% block content %}
+    {%load static%}
+  <body>
+    <div id="columns">
+      
+      {% for photo in photos.all %}
+        <figure>
+          <a href="{{ photo.imagedata.url }}">
+            <img src="{{ photo.imagedata.url }}">
+          </a>
+          
+          
+        </figure>
+        
+        <button  onclick="photo_like(this.id)" id="{{ photo.id }}"  style="margin: -50px 0px  0px 230px">
+          {%if request.user in photo.like.all%}
+          <i id="heart" class="fas fa-heart"></i>
+          {%else%}
+          <i id="heart" class="far fa-heart"></i>
+          {%endif%}
+        </button>    
+
+        <div class='toast' style='display:none'>
+          <div id="message"></div>
+        </div> 
+            <!--<button class="btn btn-link text-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                  <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                </svg>
+            </button> -->
+          
+          {% comment %} {% if user.is_authenticated %}
+          <form action="{% url "like" photo.id %}" method="POST">
+            {% csrf_token %}
+        
+            {% if post_is_liked %}
+            <button type="submit" name="photo_id" value="{{photo.id}}" class="btn btn-info">Unlike</button>
+            {% else %}
+            <button type="submit" name="photo_id" value="{{photo.id}}" class="btn btn-info">Like</button>
+            {% endif %}
+          </form>
+        {% else %}
+          <a class="btn btn-outline-info" href="{% url 'login' %}?next={{request.path}}">Log in to like this Photo!</a><br>
+        {% endif %} {% endcomment %}
+              
+            
+         
+
+        {%endfor%}   
+    </div>
+    
+  </body>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function photo_like(id) {
+          console.log("hi")
+          $.ajax({
+          url: "{%url 'likes'%}", // data를 전송할 url 입니다.
+          data: {
+                'photo_id': id
+            }, // photo_id 라는 name으로 id 값 전송
+          dataType: "json",
+          success: function (response) { // ajax 통신이 정상적으로 완료되었을 때
+              console.log("success")
+              $('#message').html(response.message) //id가 message의 내용을 전송받은 message로 바꾼다
+              $('.toast').fadeIn(400).delay(100).fadeOut(400) //class가 toast인 것을 서서히 나타나게 하는 메서드입니다.
+              if (response.message == "좋아요")
+                    //좋아요 눌렀을 때 
+                    {
+                        $('#heart').attr("class", "fas fa-heart")
+                    } else if (response.message == "좋아요 취소")
+                    //좋아요 상태에서 다시 눌렀을 때 
+                    {
+                        $('#heart').attr("class", "far fa-heart")
+                    }
+            }
+          })
+    }
+</script>
+
+</html>
+
+{% endblock %}
+
+
